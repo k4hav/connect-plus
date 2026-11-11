@@ -40,7 +40,7 @@ export default async function DashboardPage() {
     <div className="space-y-8">
       <section className="glass-strong rounded-3xl p-6 sm:p-8">
         <p className="text-xs uppercase tracking-[0.2em] text-cyan">Raise Your Voice Together.</p>
-        <h1 className="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl">Student Accountability Dashboard</h1>
+        <h1 className="mt-2 text-2xl font-semibold tracking-tight break-words sm:text-4xl">Student Accountability Dashboard</h1>
         <p className="mt-2 max-w-2xl text-sm text-muted">{first ? `Welcome, ${first}. ` : ""}Raise campus issues, back the ones that matter, and follow each one to a verified outcome.</p>
         <div className="mt-5 flex flex-wrap gap-3">
           <Link href="/issues/new" className="inline-flex h-10 items-center gap-2 rounded-xl bg-cyan px-4 text-sm font-medium text-[#04121b] hover:bg-bright"><PlusCircle className="h-4 w-4" aria-hidden="true" /> Raise an Issue</Link>

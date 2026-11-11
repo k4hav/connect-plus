@@ -37,7 +37,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
   ]);
 
   return (
-    <div className="flex min-h-dvh">
+    <div className="flex min-h-dvh flex-col md:flex-row">
       <SessionGuard />
       <Sidebar isStaff={!!role} githubRepoUrl={GITHUB_REPO_URL} />
       <div className="flex min-w-0 flex-1 flex-col px-4 py-4 sm:px-8 md:py-5">
