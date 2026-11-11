@@ -14,15 +14,15 @@ export function Footer() {
     <footer className="mt-12 border-t border-white/5 py-5 text-xs text-white/35">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <p>
-          Connect⁺ · Independent student-led initiative · Created by{" "}
+          Connect⁺ · Created by{" "}
           <a
             href={GITHUB_PROFILE_URL}
             target="_blank"
             rel="noopener noreferrer"
-            aria-label="Keshav Sharma on GitHub"
+            aria-label="Keshav on GitHub"
             className="inline-flex items-center gap-1 text-white/55 hover:text-cyan"
           >
-            Keshav Sharma <GithubMark className="h-3 w-3" />
+            Keshav <GithubMark className="h-3 w-3" />
           </a>
         </p>
         <nav className="flex gap-4" aria-label="Footer">
