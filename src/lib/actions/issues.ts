@@ -44,7 +44,11 @@ export async function createIssue(_prev: ActionState, formData: FormData): Promi
     .insert({ ...parsed.data, created_by: user.id })
     .select("id")
     .single();
-  if (error || !issue) return fail(dbMessage(error, "Could not publish your issue. Please try again."));
+  if (error || !issue) {
+    console.error("createIssue failed:", error?.code, error?.message, error?.details);
+    const hint = error?.code ? ` (error code ${error.code})` : "";
+    return fail(dbMessage(error, `Could not publish your issue. Please try again.${hint}`));
+  }
 
   if (evidence.length) {
     await supabase.from("issue_evidence").insert(
