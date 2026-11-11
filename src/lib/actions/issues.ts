@@ -46,7 +46,8 @@ export async function createIssue(_prev: ActionState, formData: FormData): Promi
     .single();
   if (error || !issue) {
     console.error("createIssue failed:", error?.code, error?.message, error?.details);
-    const hint = error?.code ? ` (error code ${error.code})` : "";
+    const constraint = error?.message?.match(/constraint "([^"]+)"/)?.[1];
+    const hint = error?.code ? ` (error code ${error.code}${constraint ? `, ${constraint}` : ""})` : "";
     return fail(dbMessage(error, `Could not publish your issue. Please try again.${hint}`));
   }
 
