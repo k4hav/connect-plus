@@ -1,15 +1,15 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
-import { BadgeCheck, Plus, Search, Send, X } from "lucide-react";
+import { useMemo, useState, useTransition } from "react";
+import { BadgeCheck, Check, Plus, Search, Send, X } from "lucide-react";
 import { ActionForm } from "@/components/ui/action-form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { CopyButton } from "@/components/ui/copy-button";
-import { saveEmailDraft } from "@/lib/actions/community";
+import { markEmailSent, saveEmailDraft } from "@/lib/actions/community";
 import { cn } from "@/lib/utils";
 
 type Authority = {
@@ -22,7 +22,28 @@ type Authority = {
   verification_status: string;
 };
 
-export function EmailWorkflow({ issueId, demand, authorities }: { issueId: string; demand: string; authorities: Authority[] }) {
+export function EmailWorkflow({ issueId, demand, authorities, sentByMe = [], counts = {} }: { issueId: string; demand: string; authorities: Authority[]; sentByMe?: string[]; counts?: Record<string, number> }) {
+  const [sentSet, setSentSet] = useState<string[]>(sentByMe);
+  const [extra, setExtra] = useState<Record<string, number>>({});
+  const [pending, startSend] = useTransition();
+  const [sentError, setSentError] = useState<string | null>(null);
+
+  function toggleSent(r: { key: string; name: string; email: string }, authorityId: string | null) {
+    const email = r.email.toLowerCase();
+    const next = !sentSet.includes(email);
+    setSentError(null);
+    setSentSet((s) => (next ? [...s, email] : s.filter((x) => x !== email)));
+    setExtra((x) => ({ ...x, [email]: (x[email] ?? 0) + (next ? 1 : -1) }));
+    startSend(async () => {
+      const res = await markEmailSent(issueId, r.email, r.name, authorityId, next);
+      if (!res.ok) {
+        setSentSet((s) => (next ? s.filter((x) => x !== email) : [...s, email]));
+        setExtra((x) => ({ ...x, [email]: (x[email] ?? 0) + (next ? -1 : 1) }));
+        setSentError(res.message ?? "Could not save. Please try again.");
+      }
+    });
+  }
+  const countFor = (email: string) => Math.max(0, (counts[email.toLowerCase()] ?? 0) + (extra[email.toLowerCase()] ?? 0));
   const [subject, setSubject] = useState("");
   const [body, setBody] = useState("");
   const [query, setQuery] = useState("");
@@ -47,8 +68,8 @@ export function EmailWorkflow({ issueId, demand, authorities }: { issueId: strin
   }, [authorities, query]);
 
   const chosen = [
-    ...authorities.filter((a) => selected.includes(a.id)).map((a) => ({ key: a.id, name: a.authority_name, email: a.official_email })),
-    ...manual.map((m) => ({ key: `m:${m.email}`, name: m.name, email: m.email })),
+    ...authorities.filter((a) => selected.includes(a.id)).map((a) => ({ id: a.id as string | null, key: a.id, name: a.authority_name, email: a.official_email })),
+    ...manual.map((m) => ({ id: null as string | null, key: `m:${m.email}`, name: m.name, email: m.email })),
   ];
   const toggle = (id: string) => setSelected((s) => (s.includes(id) ? s.filter((x) => x !== id) : [...s, id]));
 
@@ -173,18 +194,32 @@ export function EmailWorkflow({ issueId, demand, authorities }: { issueId: strin
                     const mailto = `mailto:${a.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
                     return (
                       <li key={a.key} className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-white/10 bg-black/10 p-3 text-sm">
-                        <span className="min-w-0 break-all">{a.name}</span>
-                        <span className="flex gap-2">
+                        <span className="min-w-0">
+                          <span className="block break-all">{a.name}</span>
+                          <span className="block text-xs text-muted">{countFor(a.email)} {countFor(a.email) === 1 ? "student has" : "students have"} emailed this</span>
+                        </span>
+                        <span className="flex flex-wrap gap-2">
                           <a href={mailto} className="inline-flex h-9 items-center gap-1.5 rounded-lg bg-cyan px-3 text-xs font-medium text-white hover:bg-bright">
                             <Send className="h-3.5 w-3.5" aria-hidden="true" /> Open mail app
                           </a>
                           <a href={gmail} target="_blank" rel="noopener noreferrer" className="inline-flex h-9 items-center rounded-lg border border-white/10 bg-white/5 px-3 text-xs hover:bg-white/10">Gmail website</a>
+                          <button
+                            type="button"
+                            disabled={pending}
+                            onClick={() => toggleSent(a, a.id)}
+                            aria-pressed={sentSet.includes(a.email.toLowerCase())}
+                            className={cn("inline-flex h-9 items-center gap-1.5 rounded-lg border px-3 text-xs font-medium transition-colors", sentSet.includes(a.email.toLowerCase()) ? "border-success/40 bg-success/15 text-success" : "border-cyan/40 bg-cyan/10 text-white hover:bg-cyan/20")}
+                          >
+                            <Check className="h-3.5 w-3.5" aria-hidden="true" /> {sentSet.includes(a.email.toLowerCase()) ? "Sent (undo)" : "I sent it"}
+                          </button>
                         </span>
                       </li>
                     );
                   })}
                 </ul>
               )}
+              {sentError && <p role="alert" className="mt-2 text-xs text-danger">{sentError}</p>}
+              <p className="mt-2 text-xs text-muted">After you press Send in your mail app, tap "I sent it". Everyone can see how many students emailed, so the office cannot ignore it.</p>
               {body.length > 1800 && (
                 <p className="mt-2 text-xs text-amber/90">Long email: if the body is cut off in your mail app, copy it with the button below and paste it.</p>
               )}

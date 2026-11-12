@@ -3,6 +3,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import { EmailWorkflow } from "@/components/issues/EmailWorkflow";
+import { EmailSentBoard } from "@/components/issues/detail/EmailSentBoard";
+import { getSentSummary } from "@/lib/data/email-sent";
 import { requireUser } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { buildDemandPrompt } from "@/lib/demand";
@@ -13,11 +15,12 @@ export const metadata: Metadata = { title: "Email authorities" };
 export default async function EmailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   if (!/^[0-9a-f-]{36}$/i.test(id)) notFound();
-  await requireUser();
+  const user = await requireUser();
   const supabase = await createClient();
   const { data: issue } = await supabase.from("issue_feed").select("*").eq("id", id).maybeSingle();
   if (!issue) notFound();
-  const [evidence, authorities] = await Promise.all([
+  const [sent, evidence, authorities] = await Promise.all([
+    getSentSummary(id, user.id),
     supabase.from("issue_evidence").select("external_url, description, verification_status").eq("issue_id", id),
     supabase
       .from("authority_directory")
@@ -37,7 +40,8 @@ export default async function EmailPage({ params }: { params: Promise<{ id: stri
         <h1 className="text-2xl font-semibold tracking-tight">Email authorities</h1>
         <p className="mt-1 text-sm text-muted">{issue.title}</p>
       </header>
-      <EmailWorkflow issueId={id} demand={buildDemandPrompt(issue, evidence.data ?? [], SITE_URL)} authorities={authorities.data ?? []} />
+      <EmailWorkflow issueId={id} demand={buildDemandPrompt(issue, evidence.data ?? [], SITE_URL)} authorities={authorities.data ?? []} sentByMe={sent.mine} counts={sent.counts} />
+      <EmailSentBoard summary={sent} />
     </div>
   );
 }

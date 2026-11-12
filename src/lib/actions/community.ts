@@ -103,3 +103,30 @@ export async function saveEmailDraft(issueId: string, authorityIds: string[], ma
     .upsert(authorityIds.map((authority_id) => ({ issue_id: issueId, authority_id, selected_by: user.id })), { onConflict: "issue_id,authority_id,selected_by", ignoreDuplicates: true });
   return done("Draft saved. Nothing has been sent. Gmail sending arrives once your Google account is connected.");
 }
+
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+/** A student confirms they sent (or un-confirms) an email. The count is visible to everyone. */
+export async function markEmailSent(issueId: string, email: string, name: string | null, authorityId: string | null, sent: boolean): Promise<ActionState> {
+  const user = await getCurrentUser();
+  if (!user) return fail("Please sign in again.");
+  if (!/^[0-9a-f-]{36}$/i.test(issueId)) return fail("Issue not found.");
+  const address = email.trim().toLowerCase();
+  if (!EMAIL_RE.test(address) || address.length > 200) return fail("Enter a valid email address.");
+  const supabase = await createClient();
+  if (sent) {
+    const { error } = await supabase
+      .from("email_sent")
+      .upsert(
+        { issue_id: issueId, sent_by: user.id, recipient_email: address, recipient_name: name?.trim().slice(0, 150) || null, authority_id: authorityId },
+        { onConflict: "issue_id,sent_by,recipient_email", ignoreDuplicates: true },
+      );
+    if (error) return fail(dbMessage(error));
+  } else {
+    const { error } = await supabase.from("email_sent").delete().eq("issue_id", issueId).eq("sent_by", user.id).eq("recipient_email", address);
+    if (error) return fail(dbMessage(error));
+  }
+  revalidatePath(`/issues/${issueId}`);
+  revalidatePath(`/issues/${issueId}/email`);
+  return done(sent ? "Recorded. Thank you for speaking up." : "Removed from the record.");
+}

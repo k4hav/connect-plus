@@ -11,6 +11,8 @@ import { EvidenceSection } from "@/components/issues/detail/EvidenceSection";
 import { AccountabilitySection } from "@/components/issues/detail/AccountabilitySection";
 import { CommentsSection } from "@/components/issues/detail/CommentsSection";
 import { StaffPanel } from "@/components/issues/detail/StaffPanel";
+import { EmailSentBoard } from "@/components/issues/detail/EmailSentBoard";
+import { getSentSummary } from "@/lib/data/email-sent";
 import { ReportContent } from "@/components/issues/detail/ReportContent";
 import { toggleFollow, toggleSupport } from "@/lib/actions/issues";
 import { getStaffRole, requireUser } from "@/lib/auth";
@@ -64,6 +66,7 @@ export default async function IssueDetailPage({
     supabase.from("campaigns").select("id, title, status, supporter_count").eq("issue_id", id).order("created_at", { ascending: false }),
   ]);
 
+  const sent = await getSentSummary(id, user.id);
   const evidenceRows = evidence.data ?? [];
   const mine = issue.created_by === user.id;
   const demand = buildDemandPrompt(issue, evidenceRows, SITE_URL);
@@ -165,6 +168,8 @@ export default async function IssueDetailPage({
             </ul>
           </section>
         )}
+
+        <EmailSentBoard summary={sent} />
 
         <EvidenceSection issueId={id} evidence={evidenceRows} isStaff={isStaff} />
         <AccountabilitySection
