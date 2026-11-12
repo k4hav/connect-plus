@@ -89,16 +89,16 @@ export async function updateProfile(_prev: ActionState, formData: FormData): Pro
 }
 
 /** Saves a draft of the student's pasted email plus their selected authorities. Nothing is sent. */
-export async function saveEmailDraft(issueId: string, authorityIds: string[], _prev: ActionState, formData: FormData): Promise<ActionState> {
+export async function saveEmailDraft(issueId: string, authorityIds: string[], manualEmails: string[], _prev: ActionState, formData: FormData): Promise<ActionState> {
   const user = await getCurrentUser();
   if (!user) return fail("Please sign in again.");
   const parsed = parseForm(emailDraftSchema, formData);
   if (parsed.errors) return fail("Please fix the highlighted fields.", parsed.errors);
-  if (authorityIds.length === 0) return fail("Select at least one authority.");
+  if (authorityIds.length === 0 && manualEmails.length === 0) return fail("Choose at least one authority or add an email.");
   const supabase = await createClient();
   const { error } = await supabase.from("email_campaigns").insert({ issue_id: issueId, created_by: user.id, ...parsed.data, status: "draft" });
   if (error) return fail(dbMessage(error));
-  await supabase
+  if (authorityIds.length > 0) await supabase
     .from("issue_recipients")
     .upsert(authorityIds.map((authority_id) => ({ issue_id: issueId, authority_id, selected_by: user.id })), { onConflict: "issue_id,authority_id,selected_by", ignoreDuplicates: true });
   return done("Draft saved. Nothing has been sent. Gmail sending arrives once your Google account is connected.");

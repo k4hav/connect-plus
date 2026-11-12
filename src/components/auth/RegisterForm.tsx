@@ -77,8 +77,7 @@ export function RegisterForm({ onSwitch, colleges = [] }: { onSwitch?: () => voi
     if (!data.session) {
       router.push(`/verify?email=${encodeURIComponent(v.email)}`);
     } else {
-      router.replace("/dashboard");
-      router.refresh();
+      window.location.assign("/dashboard");
     }
   }
 

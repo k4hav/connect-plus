@@ -56,8 +56,8 @@ export function VerifyOtpForm({ email }: { email: string }) {
     setLoading(true);
     const supabase = createClient();
     const { error } = await supabase.auth.verifyOtp({ email: parsed.data.email, token: parsed.data.token, type: "signup" });
-    setLoading(false);
     if (error) {
+      setLoading(false);
       setError(
         error.code === "otp_expired"
           ? "That code has expired. Request a new one."
@@ -65,8 +65,7 @@ export function VerifyOtpForm({ email }: { email: string }) {
       );
       return;
     }
-    router.replace("/dashboard");
-    router.refresh();
+    window.location.assign("/dashboard");
   }
 
   async function resend() {

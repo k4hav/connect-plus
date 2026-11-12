@@ -53,8 +53,9 @@ export function LoginForm({ onSwitch }: { onSwitch?: () => void }) {
       );
       return;
     }
-    router.replace(safeNext(params.get("next")));
-    router.refresh();
+    // Full page load: guarantees the new session cookie is sent and no old cached redirect is reused.
+    setLoading(true);
+    window.location.assign(safeNext(params.get("next")));
   }
 
   return (
