@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { TopBar } from "@/components/shell/TopBar";
+import { MainNav } from "@/components/shell/MainNav";
 import { Footer } from "@/components/shell/Footer";
 import { SessionGuard } from "@/components/shell/SessionGuard";
 import { Logo } from "@/components/brand/Logo";
@@ -36,15 +37,14 @@ export default async function AppLayout({ children }: { children: React.ReactNod
   ]);
 
   return (
-    <div className="flex min-h-dvh flex-col px-4 pb-28 sm:px-8 md:pb-6">
+    <div className="min-h-dvh px-3 py-3 pb-28 sm:px-6">
       <SessionGuard />
-      <TopBar unread={unread.count ?? 0} name={profile.data?.full_name ?? "Student"} isStaff={!!role} githubRepoUrl={GITHUB_REPO_URL} />
-      <div className="mx-auto w-full max-w-6xl flex-1">
-        <main>{children}</main>
-      </div>
       <div className="mx-auto w-full max-w-6xl">
+        <TopBar unread={unread.count ?? 0} name={profile.data?.full_name ?? "Student"} isStaff={!!role} githubRepoUrl={GITHUB_REPO_URL} />
+        <main className="app-main glass-panel rounded-[27px] p-4 sm:p-8">{children}</main>
         <Footer />
       </div>
+      <MainNav />
     </div>
   );
 }

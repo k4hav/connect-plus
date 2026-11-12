@@ -25,6 +25,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <div aria-hidden="true" className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
           <div className="orb orb-a animate-float" />
           <div className="orb orb-b animate-float-delay" />
+          <div className="orb orb-c animate-float" />
         </div>
         {children}
       </body>

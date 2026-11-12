@@ -42,12 +42,12 @@ export function MoreMenu({ isStaff, githubRepoUrl, initial }: Props) {
         aria-expanded={open}
         aria-haspopup="menu"
         aria-label="Open menu"
-        className="glass inline-flex h-11 w-11 items-center justify-center rounded-2xl text-sm font-semibold text-cyan transition-colors hover:border-cyan/40"
+        className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-sm font-semibold text-cyan transition-colors hover:bg-white/15"
       >
         {initial}
       </button>
       {open && (
-        <div role="menu" className="glass-strong absolute right-0 top-13 z-50 w-64 rounded-2xl p-2 shadow-float">
+        <div role="menu" className="glass-strong absolute right-0 top-12 z-50 w-64 rounded-2xl p-2 shadow-float">
           {LINKS.map(({ href, label, icon: Icon }) => (
             <Link key={href} href={href} role="menuitem" onClick={() => setOpen(false)} className={row}>
               <Icon className="h-[18px] w-[18px]" aria-hidden="true" /> {label}

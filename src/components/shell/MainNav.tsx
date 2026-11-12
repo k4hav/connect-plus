@@ -24,7 +24,7 @@ function indexFor(pathname: string) {
   return -1;
 }
 
-/** The main menu: a pill of water that follows the page you are on. Bottom of the screen on phones, top on desktop. */
+/** The main menu: a pill of water that follows the page you are on. Floats at the bottom of the screen. */
 export function MainNav() {
   const pathname = usePathname();
   const router = useRouter();
@@ -36,7 +36,7 @@ export function MainNav() {
   }, [pathname]);
 
   return (
-    <div className="fixed inset-x-0 bottom-4 z-40 flex justify-center px-3 md:static md:inset-auto md:z-auto md:px-0">
+    <div className="fixed inset-x-0 bottom-4 z-40 flex justify-center px-3">
       <LiquidNavbar
         items={ITEMS}
         active={active}
