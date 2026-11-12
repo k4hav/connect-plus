@@ -33,7 +33,7 @@ export default async function AuthoritiesPage({ searchParams }: { searchParams: 
       </header>
       <form className="flex gap-2" role="search">
         <input name="q" defaultValue={sp.q ?? ""} placeholder="Search name, department, designation" aria-label="Search authorities" className="h-11 flex-1 rounded-xl border border-white/10 bg-white/[0.04] px-3.5 text-sm focus:border-cyan/60 focus:outline-none focus:ring-2 focus:ring-cyan/20" />
-        <button className="h-11 rounded-xl bg-cyan px-4 text-sm font-medium text-[#04121b] hover:bg-bright">Search</button>
+        <button className="h-11 rounded-xl bg-cyan px-4 text-sm font-medium text-white hover:bg-bright">Search</button>
       </form>
       {!data?.length ? (
         <EmptyState icon={Landmark} title="No authorities listed">The directory is empty or nothing matched. Administrators add verified contacts with a source.</EmptyState>

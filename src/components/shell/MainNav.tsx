@@ -7,7 +7,7 @@ import { LiquidNavbar, type LiquidNavItem } from "./LiquidNavbar";
 
 const ICON = { className: "h-[18px] w-[18px]", "aria-hidden": true } as const;
 
-const ITEMS: (LiquidNavItem & { href: string })[] = [
+export const ITEMS: (LiquidNavItem & { href: string })[] = [
   { label: "Home", href: "/dashboard", icon: <Home {...ICON} />, fx: "glow" },
   { label: "Issues", href: "/issues", icon: <Compass {...ICON} />, fx: "spin" },
   { label: "Raise", href: "/issues/new", icon: <PlusCircle {...ICON} />, fx: "pop" },
@@ -15,7 +15,7 @@ const ITEMS: (LiquidNavItem & { href: string })[] = [
   { label: "Authorities", href: "/authorities", icon: <Landmark {...ICON} />, fx: "drop" },
 ];
 
-function indexFor(pathname: string) {
+export function indexFor(pathname: string) {
   if (pathname === "/issues/new") return 2;
   if (pathname === "/issues" || pathname.startsWith("/issues/")) return 1;
   if (pathname.startsWith("/campaigns")) return 3;
@@ -24,7 +24,7 @@ function indexFor(pathname: string) {
   return -1;
 }
 
-/** The main menu: a pill of water that follows the page you are on. Floats at the bottom of the screen. */
+/** The main menu: a pill of water that follows the page you are on. Phone only: floats at the bottom. On desktop the SideRail is used. */
 export function MainNav() {
   const pathname = usePathname();
   const router = useRouter();
@@ -36,7 +36,7 @@ export function MainNav() {
   }, [pathname]);
 
   return (
-    <div className="fixed inset-x-0 bottom-4 z-40 flex justify-center px-3">
+    <div className="fixed inset-x-0 bottom-4 z-40 flex justify-center px-3 md:hidden">
       <LiquidNavbar
         items={ITEMS}
         active={active}

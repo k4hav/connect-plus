@@ -25,7 +25,7 @@ export function Timeline({ events }: { events: Event[] }) {
     <ol className="relative space-y-4 border-l border-white/10 pl-5">
       {events.map((e) => (
         <li key={e.id} className="relative">
-          <span className={`absolute -left-[25px] top-1.5 h-2.5 w-2.5 rounded-full ring-4 ring-[#0b1220] ${DOT[e.event_type] ?? "bg-white/30"}`} aria-hidden="true" />
+          <span className={`absolute -left-[25px] top-1.5 h-2.5 w-2.5 rounded-full ring-4 ring-[#160a0b] ${DOT[e.event_type] ?? "bg-white/30"}`} aria-hidden="true" />
           <p className="text-sm text-ink">{e.event_description}</p>
           <p className="mt-0.5 text-xs text-white/40">
             {e.actor_name ? `${e.actor_name} · ` : ""}

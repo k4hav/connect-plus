@@ -33,7 +33,7 @@ export function AuthShell({ title, subtitle, panelHeading, panelText, children }
           className="relative hidden flex-col justify-center overflow-hidden p-10 md:flex"
         >
           <div
-            className="absolute inset-0 bg-gradient-to-br from-[#0b2a3a] via-[#0a1a28] to-[#080a10]"
+            className="absolute inset-0 bg-gradient-to-br from-[#3a0b12] via-[#1a0809] to-[#080505]"
             style={{ clipPath: "polygon(14% 0, 100% 0, 100% 100%, 0 100%)" }}
           />
           <div

@@ -79,7 +79,7 @@ export function AuthSwitch({ initialMode, colleges = [] }: { initialMode: Mode; 
           )}
         >
           <div
-            className={cn("absolute inset-0 bg-gradient-to-br from-[#0f5a4b] via-[#0a3a36] to-[#07181c] transition-[clip-path] duration-[900ms]", EASE)}
+            className={cn("absolute inset-0 bg-gradient-to-br from-[#5a0f18] via-[#3a0a10] to-[#180708] transition-[clip-path] duration-[900ms]", EASE)}
             style={{
               clipPath: signin
                 ? "polygon(14% 0, 100% 0, 100% 100%, 0 100%)"

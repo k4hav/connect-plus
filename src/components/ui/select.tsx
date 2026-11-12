@@ -31,7 +31,7 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
           aria-invalid={error ? true : undefined}
           aria-describedby={error || hint ? descId : undefined}
           className={cn(
-            "h-11 w-full appearance-none rounded-xl border border-white/10 bg-[#0f1826] px-3.5 text-sm text-ink transition-colors focus:border-cyan/60 focus:outline-none focus:ring-2 focus:ring-cyan/20",
+            "h-11 w-full appearance-none rounded-xl border border-white/10 bg-[#1a0d0d] px-3.5 text-sm text-ink transition-colors focus:border-cyan/60 focus:outline-none focus:ring-2 focus:ring-cyan/20",
             error && "border-danger/60",
             className,
           )}

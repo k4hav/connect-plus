@@ -36,7 +36,7 @@ export default async function DashboardPage() {
 
   return (
     <div className="space-y-8">
-      <section className="reveal relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-[#0f2236] via-[#0b1626] to-[#0a1220] p-6 sm:p-10">
+      <section className="reveal relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-white/[0.14] via-cyan-300/[0.07] to-white/[0.04] p-6 sm:p-10">
         <div aria-hidden="true" className="animate-float pointer-events-none absolute -right-16 -top-16 h-64 w-64 rounded-full bg-cyan/20 blur-3xl" />
         <div aria-hidden="true" className="animate-float-delay pointer-events-none absolute -bottom-20 left-1/3 h-56 w-56 rounded-full bg-electric/15 blur-3xl" />
         <p className="relative text-xs font-medium uppercase tracking-[0.22em] text-cyan">Raise Your Voice Together.</p>
@@ -45,7 +45,7 @@ export default async function DashboardPage() {
         </h1>
         <p className="reveal relative mt-3 max-w-xl text-[15px] text-muted" style={{ "--i": 1 } as React.CSSProperties}>Report an issue, get other students to support it, and send it to the people who can fix it.</p>
         <div className="reveal relative mt-6 flex flex-wrap gap-3" style={{ "--i": 2 } as React.CSSProperties}>
-          <Link href="/issues/new" className="press inline-flex h-11 items-center gap-2 rounded-xl bg-cyan px-5 text-sm font-medium text-[#04121b] shadow-[0_8px_24px_-8px_rgba(67,207,255,0.6)] transition hover:bg-bright">
+          <Link href="/issues/new" className="press inline-flex h-11 items-center gap-2 rounded-xl bg-cyan px-5 text-sm font-medium text-white shadow-[0_8px_24px_-8px_rgba(255,59,71,0.6)] transition hover:bg-bright">
             <PlusCircle className="h-4 w-4" aria-hidden="true" /> Raise an issue
           </Link>
           <Link href="/issues" className="inline-flex h-11 items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-5 text-sm transition hover:bg-white/10">

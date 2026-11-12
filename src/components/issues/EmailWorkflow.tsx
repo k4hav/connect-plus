@@ -80,7 +80,7 @@ export function EmailWorkflow({ issueId, demand, authorities }: { issueId: strin
                     return (
                       <li key={a.id}>
                         <label className={cn("flex cursor-pointer items-start gap-3 rounded-xl border p-3 text-sm transition-colors", on ? "border-cyan/40 bg-cyan/5" : "border-white/10 bg-black/10 hover:border-white/20")}>
-                          <input type="checkbox" checked={on} onChange={() => toggle(a.id)} className="mt-1 h-4 w-4 accent-[#43CFFF]" />
+                          <input type="checkbox" checked={on} onChange={() => toggle(a.id)} className="mt-1 h-4 w-4 accent-[#FF3B47]" />
                           <span className="min-w-0 flex-1">
                             <span className="flex flex-wrap items-center gap-2">
                               <span className="font-medium">{a.authority_name}</span>
@@ -139,7 +139,7 @@ export function EmailWorkflow({ issueId, demand, authorities }: { issueId: strin
                       <li key={a.id} className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-white/10 bg-black/10 p-3 text-sm">
                         <span className="min-w-0 break-all">{a.authority_name}</span>
                         <span className="flex gap-2">
-                          <a href={mailto} className="inline-flex h-9 items-center gap-1.5 rounded-lg bg-cyan px-3 text-xs font-medium text-[#04121b] hover:bg-bright">
+                          <a href={mailto} className="inline-flex h-9 items-center gap-1.5 rounded-lg bg-cyan px-3 text-xs font-medium text-white hover:bg-bright">
                             <Send className="h-3.5 w-3.5" aria-hidden="true" /> Open mail app
                           </a>
                           <a href={gmail} target="_blank" rel="noopener noreferrer" className="inline-flex h-9 items-center rounded-lg border border-white/10 bg-white/5 px-3 text-xs hover:bg-white/10">Gmail website</a>

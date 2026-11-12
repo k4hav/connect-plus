@@ -16,7 +16,7 @@ export default function DeveloperPage() {
   return (
     <div className="mx-auto max-w-2xl space-y-6">
       <section className="glass-strong rounded-3xl p-6 sm:p-8">
-        <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-cyan to-electric text-2xl font-semibold text-[#04121b]" aria-hidden="true">KS</div>
+        <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-cyan to-electric text-2xl font-semibold text-white" aria-hidden="true">KS</div>
         <h1 className="mt-4 text-3xl font-semibold tracking-tight">{DEVELOPER.name}</h1>
         <p className="text-sm text-cyan">{DEVELOPER.role}</p>
         <p className="mt-1 text-sm text-muted">{DEVELOPER.education}</p>

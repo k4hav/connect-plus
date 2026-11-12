@@ -77,7 +77,7 @@ export default async function CampaignPage({ params }: { params: Promise<{ id: s
               const s = String(fd.get("status"));
               if (["active", "paused", "completed", "closed"].includes(s)) await setCampaignStatus(id, s as "active");
             }} className="ml-auto flex items-center gap-2">
-              <select name="status" defaultValue={c.status} aria-label="Campaign status" className="h-10 rounded-xl border border-white/10 bg-[#0f1826] px-3 text-sm">
+              <select name="status" defaultValue={c.status} aria-label="Campaign status" className="h-10 rounded-xl border border-white/10 bg-[#1a0d0d] px-3 text-sm">
                 <option value="active">Active</option>
                 <option value="paused">Paused</option>
                 <option value="completed">Completed</option>
