@@ -2,7 +2,7 @@ import { cn } from "@/lib/utils";
 
 /** Soft pulsing placeholder shown while a page loads. */
 export function Skeleton({ className }: { className?: string }) {
-  return <div aria-hidden="true" className={cn("animate-pulse rounded-lg bg-white/[0.06]", className)} />;
+  return <div aria-hidden="true" className={cn("shimmer rounded-lg", className)} />;
 }
 
 export function CardSkeleton({ lines = 3 }: { lines?: number }) {

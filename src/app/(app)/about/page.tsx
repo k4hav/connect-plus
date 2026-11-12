@@ -87,7 +87,7 @@ export default function AboutPage() {
       </section>
 
       <p className="text-sm text-muted">
-        Created by {DEVELOPER.name}, {DEVELOPER.role} · <Link href="/developer" className="text-cyan hover:underline">Developer</Link> · <Link href="/contributors" className="text-cyan hover:underline">Contributors</Link> · <Link href="/report-bug" className="text-cyan hover:underline">Report a bug</Link>
+        <Link href="/developer" className="text-cyan hover:underline">Developer</Link> · <Link href="/contributors" className="text-cyan hover:underline">Contributors</Link> · <Link href="/report-bug" className="text-cyan hover:underline">Report a bug</Link>
       </p>
     </div>
   );

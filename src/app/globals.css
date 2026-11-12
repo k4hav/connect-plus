@@ -6,6 +6,9 @@
   color-scheme: dark;
 }
 
+html {
+  scroll-behavior: smooth;
+}
 html,
 body {
   background: #070b12;
@@ -25,16 +28,16 @@ body {
 @layer components {
   /* Liquid glass: translucent layer, fine border, inner highlight, soft depth shadow. */
   .glass {
-    @apply border border-white/10 shadow-glass backdrop-blur-xl;
+    @apply border border-white/10 shadow-glass backdrop-blur-md md:backdrop-blur-xl;
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.085), rgba(255, 255, 255, 0.03) 45%, rgba(255, 255, 255, 0.05));
   }
   /* Denser layer for primary containers so text stays readable. */
   .glass-strong {
-    @apply border border-white/10 shadow-float backdrop-blur-2xl;
+    @apply border border-white/10 shadow-float backdrop-blur-lg md:backdrop-blur-2xl;
     background: linear-gradient(145deg, rgba(20, 30, 46, 0.82), rgba(10, 16, 27, 0.9));
   }
   .glass-hover {
-    @apply transition-[transform,border-color,background-color] duration-200 hover:-translate-y-0.5 hover:border-white/20;
+    @apply transition-[transform,border-color,background-color,box-shadow] duration-300 ease-out hover:-translate-y-1 hover:border-cyan/30 hover:shadow-[0_18px_40px_-18px_rgba(67,207,255,0.25)] active:translate-y-0 active:scale-[0.99];
   }
   /* Spatial backdrop: layered ambient light behind the interface. */
   .app-backdrop {
@@ -43,10 +46,51 @@ body {
       radial-gradient(40rem 26rem at -8% 108%, rgba(19, 184, 154, 0.09), transparent 60%),
       radial-gradient(30rem 20rem at 55% 120%, rgba(100, 139, 255, 0.07), transparent 60%),
       #070b12;
-    background-attachment: fixed;
   }
   .label {
     @apply text-xs font-medium text-muted;
+  }
+}
+
+/* Motion: soft entrance for pages and cards. Delay is set per element with style={{ "--i": n }}. */
+@keyframes page-in {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes float-slow {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(18px, -14px, 0) scale(1.08); }
+}
+@keyframes shine {
+  from { background-position: 200% 0; }
+  to { background-position: -200% 0; }
+}
+@keyframes shimmer {
+  from { background-position: -200% 0; }
+  to { background-position: 200% 0; }
+}
+@layer utilities {
+  .orb { position: absolute; border-radius: 9999px; will-change: transform; }
+  .orb-a { top: -10rem; right: -8rem; width: 34rem; height: 34rem; background: radial-gradient(circle, rgba(67, 207, 255, 0.16), transparent 65%); }
+  .orb-b { bottom: -12rem; left: -10rem; width: 38rem; height: 38rem; background: radial-gradient(circle, rgba(100, 139, 255, 0.13), transparent 65%); }
+  .shimmer {
+    background: linear-gradient(100deg, rgba(255,255,255,0.04) 30%, rgba(255,255,255,0.11) 50%, rgba(255,255,255,0.04) 70%);
+    background-size: 200% 100%;
+    animation: shimmer 1.4s ease-in-out infinite;
+  }
+  .press { transition: transform 0.15s ease; }
+  .press:active { transform: scale(0.97); }
+  .animate-page-in { animation: page-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) both; }
+  .reveal { animation: page-in 0.6s cubic-bezier(0.22, 1, 0.36, 1) both; animation-delay: calc(var(--i, 0) * 70ms); }
+  .animate-float { animation: float-slow 9s ease-in-out infinite; }
+  .animate-float-delay { animation: float-slow 11s ease-in-out -4s infinite; }
+  .text-shine {
+    background: linear-gradient(100deg, #43cfff 20%, #b9ecff 40%, #648bff 60%, #43cfff 80%);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: shine 6s linear infinite;
   }
 }
 

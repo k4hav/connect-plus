@@ -22,7 +22,7 @@ export default async function ContributorsPage() {
     <div className="space-y-6">
       <header>
         <h1 className="text-2xl font-semibold tracking-tight">Contributors</h1>
-        <p className="mt-1 text-sm text-muted">Connect⁺ is growing. Built with a vision by Keshav Sharma. Contributions are welcome.</p>
+        <p className="mt-1 text-sm text-muted">Connect⁺ is growing. Contributions are welcome.</p>
       </header>
       {!data?.length ? (
         <EmptyState icon={Users} title="Contributors will appear here" action={GITHUB_REPO_URL ? <a href={GITHUB_REPO_URL} target="_blank" rel="noopener noreferrer" className="inline-flex h-10 items-center rounded-xl bg-cyan px-4 text-sm font-medium text-[#04121b] hover:bg-bright">Contribute on GitHub</a> : undefined}>

@@ -23,10 +23,10 @@ export type FeedIssue = {
   followed_by_me?: boolean;
 };
 
-export function IssueCard({ issue, siteUrl }: { issue: FeedIssue; siteUrl: string }) {
+export function IssueCard({ issue, siteUrl, index = 0 }: { issue: FeedIssue; siteUrl: string; index?: number }) {
   const supportAction = toggleSupport.bind(null, issue.id);
   return (
-    <article className="glass glass-hover flex flex-col rounded-2xl p-5">
+    <article className="glass glass-hover reveal flex flex-col rounded-2xl p-5" style={{ "--i": Math.min(index, 8) } as React.CSSProperties}>
       <div className="flex flex-wrap items-center gap-2">
         <StatusBadge status={issue.status} />
         <Badge tone="neutral">{issue.category_label ?? issue.category}</Badge>

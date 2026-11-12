@@ -121,7 +121,7 @@ export function EmailWorkflow({ issueId, demand, authorities }: { issueId: strin
                 </div>
               </div>
               <p className="mt-3 text-xs text-muted">
-                Each authority gets a separate email from your own account (never one email with everyone in CC). Nothing is sent by Connect⁺: you press Send in your own mail app.
+                On a phone, tap "Open mail app" to use your Gmail app. Each authority gets a separate email from your own account (never one email with everyone in CC). Nothing is sent by Connect⁺: you press Send in your own mail app.
               </p>
               <p className="mt-2 rounded-xl border border-amber/20 bg-amber/5 p-3 text-xs leading-relaxed text-amber/90">
                 I wanted to build automatic email sending here, but I did not have enough time. For now, please press Send in your own mail app. If you have time and the skills, you are very welcome to help build it:{" "}
@@ -139,10 +139,10 @@ export function EmailWorkflow({ issueId, demand, authorities }: { issueId: strin
                       <li key={a.id} className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-white/10 bg-black/10 p-3 text-sm">
                         <span className="min-w-0 break-all">{a.authority_name}</span>
                         <span className="flex gap-2">
-                          <a href={gmail} target="_blank" rel="noopener noreferrer" className="inline-flex h-9 items-center gap-1.5 rounded-lg bg-cyan px-3 text-xs font-medium text-[#04121b] hover:bg-bright">
-                            <Send className="h-3.5 w-3.5" aria-hidden="true" /> Open in Gmail
+                          <a href={mailto} className="inline-flex h-9 items-center gap-1.5 rounded-lg bg-cyan px-3 text-xs font-medium text-[#04121b] hover:bg-bright">
+                            <Send className="h-3.5 w-3.5" aria-hidden="true" /> Open mail app
                           </a>
-                          <a href={mailto} className="inline-flex h-9 items-center rounded-lg border border-white/10 bg-white/5 px-3 text-xs hover:bg-white/10">Other mail app</a>
+                          <a href={gmail} target="_blank" rel="noopener noreferrer" className="inline-flex h-9 items-center rounded-lg border border-white/10 bg-white/5 px-3 text-xs hover:bg-white/10">Gmail website</a>
                         </span>
                       </li>
                     );

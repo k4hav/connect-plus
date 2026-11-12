@@ -1,6 +1,5 @@
 import Link from "next/link";
-import { Sidebar } from "@/components/shell/Sidebar";
-import { Header } from "@/components/shell/Header";
+import { TopBar } from "@/components/shell/TopBar";
 import { Footer } from "@/components/shell/Footer";
 import { SessionGuard } from "@/components/shell/SessionGuard";
 import { Logo } from "@/components/brand/Logo";
@@ -37,17 +36,14 @@ export default async function AppLayout({ children }: { children: React.ReactNod
   ]);
 
   return (
-    <div className="flex min-h-dvh flex-col md:flex-row">
+    <div className="flex min-h-dvh flex-col px-4 pb-28 sm:px-8 md:pb-6">
       <SessionGuard />
-      <Sidebar isStaff={!!role} githubRepoUrl={GITHUB_REPO_URL} />
-      <div className="flex min-w-0 flex-1 flex-col px-4 py-4 sm:px-8 md:py-5">
-        <div className="mx-auto w-full max-w-6xl flex-1">
-          <Header unread={unread.count ?? 0} name={profile.data?.full_name ?? "Student"} />
-          <main>{children}</main>
-        </div>
-        <div className="mx-auto w-full max-w-6xl">
-          <Footer />
-        </div>
+      <TopBar unread={unread.count ?? 0} name={profile.data?.full_name ?? "Student"} isStaff={!!role} githubRepoUrl={GITHUB_REPO_URL} />
+      <div className="mx-auto w-full max-w-6xl flex-1">
+        <main>{children}</main>
+      </div>
+      <div className="mx-auto w-full max-w-6xl">
+        <Footer />
       </div>
     </div>
   );

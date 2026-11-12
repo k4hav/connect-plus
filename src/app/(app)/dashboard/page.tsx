@@ -1,88 +1,93 @@
+import type { CSSProperties } from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
-import { CheckCircle2, Clock, FileText, Heart, Megaphone, PlusCircle } from "lucide-react";
+import { ArrowRight, CheckCircle2, Clock, FileText, Heart, PlusCircle, ThumbsUp, Send } from "lucide-react";
 import { IssueCard, type FeedIssue } from "@/components/issues/IssueCard";
-import { Timeline } from "@/components/issues/detail/Timeline";
 import { requireUser } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
-import { ISSUE_STATUSES } from "@/lib/constants";
-import { compact, timeAgo, truncate } from "@/lib/format";
+import { CountUp } from "@/components/ui/count-up";
+import { timeAgo, truncate } from "@/lib/format";
 import { SITE_URL } from "@/lib/utils";
 
-export const metadata: Metadata = { title: "Dashboard" };
+export const metadata: Metadata = { title: "Home" };
+
+const STEPS = [
+  { icon: PlusCircle, title: "Raise an issue", text: "Write the problem clearly and add proof." },
+  { icon: ThumbsUp, title: "Get support", text: "Other students back it so it cannot be ignored." },
+  { icon: Send, title: "Email the authority", text: "Send it to the right person and track the reply." },
+];
 
 export default async function DashboardPage() {
-  const user = await requireUser();
+  await requireUser();
   const supabase = await createClient();
-  const [stats, counts, trending, activity, responses, followed, me] = await Promise.all([
+  const [stats, trending, followed] = await Promise.all([
     supabase.from("platform_stats").select("*").maybeSingle(),
-    supabase.from("issue_status_counts").select("status, total"),
     supabase.from("issue_feed").select("*").order("trending_score", { ascending: false }).limit(4),
-    supabase.from("issue_timeline").select("id, event_type, event_description, actor_name, created_at, issue_id, issue_title").order("created_at", { ascending: false }).limit(8),
-    supabase.from("official_responses").select("id, issue_id, authority_name, response_summary, response_date, verification_status, issues(title)").order("created_at", { ascending: false }).limit(4),
-    supabase.from("issue_feed").select("*").eq("followed_by_me", true).order("last_activity_at", { ascending: false }).limit(3),
-    supabase.from("profiles").select("full_name").eq("id", user.id).maybeSingle(),
+    supabase.from("issue_feed").select("id, title, last_activity_at").eq("followed_by_me", true).order("last_activity_at", { ascending: false }).limit(3),
   ]);
 
   const s = stats.data as Record<string, number> | null;
   const cards = [
-    { label: "Reported issues", value: s?.total_issues ?? 0, icon: FileText },
-    { label: "Active campaigns", value: s?.active_campaigns ?? 0, icon: Megaphone },
-    { label: "Awaiting action", value: s?.awaiting_action ?? 0, icon: Clock },
-    { label: "Resolved", value: s?.resolved_issues ?? 0, icon: CheckCircle2 },
+    { label: "Issues raised", value: s?.total_issues ?? 0, icon: FileText },
+    { label: "Waiting for reply", value: s?.awaiting_action ?? 0, icon: Clock },
+    { label: "Solved", value: s?.resolved_issues ?? 0, icon: CheckCircle2 },
     { label: "Student support", value: s?.total_support ?? 0, icon: Heart },
   ];
-  const byStatus = new Map((counts.data ?? []).map((r) => [r.status as string, Number(r.total)]));
-  const max = Math.max(1, ...byStatus.values());
-  const first = me.data?.full_name?.split(" ")[0];
 
   return (
     <div className="space-y-8">
-      <section className="glass-strong rounded-3xl p-6 sm:p-8">
-        <p className="text-xs uppercase tracking-[0.2em] text-cyan">Raise Your Voice Together.</p>
-        <h1 className="mt-2 text-2xl font-semibold tracking-tight break-words sm:text-4xl">Student Accountability Dashboard</h1>
-        <p className="mt-2 max-w-2xl text-sm text-muted">{first ? `Welcome, ${first}. ` : ""}Raise campus issues, back the ones that matter, and follow each one to a verified outcome.</p>
-        <div className="mt-5 flex flex-wrap gap-3">
-          <Link href="/issues/new" className="inline-flex h-10 items-center gap-2 rounded-xl bg-cyan px-4 text-sm font-medium text-[#04121b] hover:bg-bright"><PlusCircle className="h-4 w-4" aria-hidden="true" /> Raise an Issue</Link>
-          <Link href="/issues" className="inline-flex h-10 items-center rounded-xl border border-white/10 bg-white/5 px-4 text-sm hover:bg-white/10">Explore Issues</Link>
+      <section className="reveal relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-[#0f2236] via-[#0b1626] to-[#0a1220] p-6 sm:p-10">
+        <div aria-hidden="true" className="animate-float pointer-events-none absolute -right-16 -top-16 h-64 w-64 rounded-full bg-cyan/20 blur-3xl" />
+        <div aria-hidden="true" className="animate-float-delay pointer-events-none absolute -bottom-20 left-1/3 h-56 w-56 rounded-full bg-electric/15 blur-3xl" />
+        <p className="relative text-xs font-medium uppercase tracking-[0.22em] text-cyan">Raise Your Voice Together.</p>
+        <h1 className="relative mt-3 max-w-2xl text-3xl font-semibold leading-tight tracking-tight sm:text-5xl">
+          Problem on campus? <span className="text-shine">Make it heard.</span>
+        </h1>
+        <p className="reveal relative mt-3 max-w-xl text-[15px] text-muted" style={{ "--i": 1 } as React.CSSProperties}>Report an issue, get other students to support it, and send it to the people who can fix it.</p>
+        <div className="reveal relative mt-6 flex flex-wrap gap-3" style={{ "--i": 2 } as React.CSSProperties}>
+          <Link href="/issues/new" className="press inline-flex h-11 items-center gap-2 rounded-xl bg-cyan px-5 text-sm font-medium text-[#04121b] shadow-[0_8px_24px_-8px_rgba(67,207,255,0.6)] transition hover:bg-bright">
+            <PlusCircle className="h-4 w-4" aria-hidden="true" /> Raise an issue
+          </Link>
+          <Link href="/issues" className="inline-flex h-11 items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-5 text-sm transition hover:bg-white/10">
+            See all issues <ArrowRight className="h-4 w-4" aria-hidden="true" />
+          </Link>
         </div>
       </section>
 
-      <section aria-label="Platform statistics" className="grid grid-cols-2 gap-3 md:grid-cols-5">
-        {cards.map(({ label, value, icon: Icon }) => (
-          <div key={label} className="glass rounded-2xl p-4">
+      <section aria-label="Numbers" className="grid grid-cols-2 gap-3 md:grid-cols-4">
+        {cards.map(({ label, value, icon: Icon }, n) => (
+          <div key={label} className="glass glass-hover reveal rounded-2xl p-4" style={{ "--i": n + 3 } as React.CSSProperties}>
             <Icon className="h-4 w-4 text-cyan" aria-hidden="true" />
-            <p className="mt-3 text-2xl font-semibold tabular-nums">{compact(Number(value))}</p>
+            <p className="mt-3 text-3xl font-semibold tabular-nums"><CountUp value={Number(value)} /></p>
             <p className="text-xs text-muted">{label}</p>
           </div>
         ))}
       </section>
 
-      <section className="glass rounded-2xl p-5" aria-labelledby="st-h">
-        <h2 id="st-h" className="font-medium">Issues by status</h2>
-        <ul className="mt-4 space-y-2.5">
-          {Object.entries(ISSUE_STATUSES).map(([key, st]) => {
-            const n = byStatus.get(key) ?? 0;
-            return (
-              <li key={key} className="grid grid-cols-[9rem_1fr_2.5rem] items-center gap-3 text-xs sm:grid-cols-[11rem_1fr_2.5rem]">
-                <span className="truncate text-muted">{st.label}</span>
-                <span className="h-2 overflow-hidden rounded-full bg-white/5"><span className="block h-full rounded-full bg-cyan/70" style={{ width: `${(n / max) * 100}%` }} /></span>
-                <span className="text-right tabular-nums">{n}</span>
-              </li>
-            );
-          })}
-        </ul>
+      <section aria-labelledby="how-h">
+        <h2 id="how-h" className="mb-3 text-lg font-medium">How it works</h2>
+        <ol className="grid gap-3 md:grid-cols-3">
+          {STEPS.map(({ icon: Icon, title, text }, i) => (
+            <li key={title} className="glass glass-hover reveal flex gap-3 rounded-2xl p-4" style={{ "--i": i + 6 } as React.CSSProperties}>
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-cyan/10 text-cyan"><Icon className="h-5 w-5" aria-hidden="true" /></span>
+              <div>
+                <p className="font-medium">{i + 1}. {title}</p>
+                <p className="mt-0.5 text-sm text-muted">{text}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
       </section>
 
       <section aria-labelledby="tr-h">
         <div className="mb-3 flex items-center justify-between">
-          <h2 id="tr-h" className="text-lg font-medium">Trending issues</h2>
-          <Link href="/issues" className="text-sm text-cyan hover:underline">View all</Link>
+          <h2 id="tr-h" className="text-lg font-medium">Popular issues</h2>
+          <Link href="/issues" className="text-sm text-cyan hover:underline">See all</Link>
         </div>
         {!trending.data?.length ? (
           <p className="glass rounded-2xl p-5 text-sm text-muted">No issues yet. Be the first to raise one.</p>
         ) : (
-          <div className="grid gap-4 md:grid-cols-2">{(trending.data as FeedIssue[]).map((i) => <IssueCard key={i.id} issue={i} siteUrl={SITE_URL} />)}</div>
+          <div className="grid gap-4 md:grid-cols-2">{(trending.data as FeedIssue[]).map((i, n) => <IssueCard key={i.id} issue={i} siteUrl={SITE_URL} index={n} />)}</div>
         )}
       </section>
 
@@ -93,38 +98,12 @@ export default async function DashboardPage() {
             {followed.data.map((i) => (
               <Link key={i.id} href={`/issues/${i.id}`} className="glass glass-hover rounded-2xl p-4 text-sm">
                 <p className="font-medium">{truncate(i.title, 70)}</p>
-                <p className="mt-1 text-xs text-muted">Last activity {timeAgo(i.last_activity_at)}</p>
+                <p className="mt-1 text-xs text-muted">Last update {timeAgo(i.last_activity_at)}</p>
               </Link>
             ))}
           </div>
         </section>
       )}
-
-      <div className="grid gap-6 lg:grid-cols-2">
-        <section className="glass rounded-2xl p-5" aria-labelledby="ra-h">
-          <h2 id="ra-h" className="mb-4 font-medium">Recent activity</h2>
-          <Timeline events={(activity.data ?? []) as never} />
-        </section>
-        <section className="glass rounded-2xl p-5" aria-labelledby="or-h">
-          <h2 id="or-h" className="mb-4 font-medium">Latest official responses</h2>
-          {!responses.data?.length ? (
-            <p className="text-sm text-muted">No official responses have been recorded yet.</p>
-          ) : (
-            <ul className="space-y-3">
-              {responses.data.map((r) => {
-                const rel = Array.isArray(r.issues) ? r.issues[0] : r.issues;
-                return (
-                  <li key={r.id} className="rounded-xl border border-white/10 bg-black/10 p-3.5 text-sm">
-                    <Link href={`/issues/${r.issue_id}`} className="text-cyan hover:underline">{(rel as { title?: string } | null)?.title ?? "Issue"}</Link>
-                    <p className="mt-1 text-xs text-white/45">{r.authority_name} · {r.verification_status === "verified" ? "Verified" : "Pending verification"}</p>
-                    <p className="mt-1 text-muted">{truncate(r.response_summary, 140)}</p>
-                  </li>
-                );
-              })}
-            </ul>
-          )}
-        </section>
-      </div>
     </div>
   );
 }

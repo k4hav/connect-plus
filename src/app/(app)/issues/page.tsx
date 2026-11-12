@@ -56,8 +56,8 @@ export default async function ExploreIssuesPage({ searchParams }: { searchParams
         </EmptyState>
       ) : (
         <div className="grid gap-4 md:grid-cols-2">
-          {issues.map((i) => (
-            <IssueCard key={i.id} issue={i} siteUrl={SITE_URL} />
+          {issues.map((i, n) => (
+            <IssueCard key={i.id} issue={i} siteUrl={SITE_URL} index={n} />
           ))}
         </div>
       )}

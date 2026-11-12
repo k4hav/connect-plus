@@ -4,11 +4,11 @@ import { Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 rounded-xl text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan/60 disabled:pointer-events-none disabled:opacity-50",
+  "inline-flex items-center justify-center gap-2 rounded-xl text-sm font-medium transition-[transform,background-color,filter,box-shadow] duration-200 active:scale-[0.97] hover:-translate-y-px focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan/60 disabled:pointer-events-none disabled:opacity-50",
   {
     variants: {
       variant: {
-        primary: "bg-cyan text-[#04121b] hover:bg-bright",
+        primary: "bg-cyan text-[#04121b] hover:bg-bright hover:shadow-[0_10px_26px_-10px_rgba(67,207,255,0.7)]",
         secondary: "glass text-white hover:bg-white/10",
         ghost: "text-white/70 hover:bg-white/5 hover:text-white",
         amber: "bg-amber text-[#1b1203] hover:brightness-110",
