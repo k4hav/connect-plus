@@ -43,12 +43,11 @@ export function SideRail() {
   }, [found]);
 
   const row = "relative z-10 flex items-center justify-center gap-3 rounded-full px-0 transition-colors lg:justify-start lg:px-4";
-  const tip = "pointer-events-none absolute left-full top-1/2 z-20 ml-3 -translate-y-1/2 whitespace-nowrap rounded-lg bg-[#140808]/95 px-2.5 py-1.5 text-xs text-white opacity-0 shadow-float transition-opacity duration-200 group-hover:opacity-100 lg:hidden";
 
   return (
     <nav
       aria-label="Main"
-      className="glass-panel sticky top-[90px] hidden w-[68px] shrink-0 self-start rounded-[26px] md:block lg:w-[236px]"
+      className="glass-panel flex min-h-0 w-[68px] flex-1 flex-col overflow-y-auto rounded-[26px] lg:w-[236px]"
       style={{ padding: PAD }}
     >
       <div className="relative">
@@ -63,6 +62,7 @@ export function SideRail() {
               <Link
                 href={it.href}
                 aria-label={it.label}
+                title={it.label}
                 aria-current={i === active ? "page" : undefined}
                 onClick={() => { setTapped(i); window.setTimeout(() => setTapped(-1), 600); }}
                 className={`${row} ${i === active ? "text-white" : "text-white/65 hover:text-white"}`}
@@ -71,12 +71,12 @@ export function SideRail() {
                 <span key={tapped === i ? "t" : "n"} className={tapped === i ? "side-icon-pop" : "inline-flex"}>{it.icon}</span>
                 <span className="hidden text-[15px] font-medium lg:inline">{it.label}</span>
               </Link>
-              <span className={tip}>{it.label}</span>
             </li>
           ))}
         </ul>
       </div>
 
+      <div className="mt-auto" />
       <div className="my-3 h-px bg-white/10" />
       <p className="mb-1 hidden px-4 text-[11px] font-medium uppercase tracking-wider text-white/40 lg:block">More</p>
       <ul className="flex flex-col gap-0.5">
@@ -87,12 +87,12 @@ export function SideRail() {
               <Link
                 href={m.href}
                 aria-label={m.label}
+                title={m.label}
                 className={`flex h-10 items-center justify-center gap-3 rounded-full text-sm transition-colors lg:justify-start lg:px-4 ${on ? "bg-white/10 text-white" : "text-white/55 hover:bg-white/5 hover:text-white"}`}
               >
                 {m.icon}
                 <span className="hidden lg:inline">{m.label}</span>
               </Link>
-              <span className={tip}>{m.label}</span>
             </li>
           );
         })}

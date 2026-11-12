@@ -3,14 +3,22 @@ import { Bell } from "lucide-react";
 import { Logo } from "@/components/brand/Logo";
 import { MoreMenu } from "./MoreMenu";
 
+/** Small glass box with the logo. */
+export function LogoBox({ className = "" }: { className?: string }) {
+  return (
+    <Link href="/dashboard" aria-label="Connect⁺ home" className={`glass-panel flex h-[54px] shrink-0 items-center justify-center rounded-2xl px-4 ${className}`}>
+      <Logo size="md" />
+    </Link>
+  );
+}
+
+/** Top row: no big strip. Phone shows the logo box on the left; both show a small box with bell + profile on the right. */
 export function TopBar({ unread, name, isStaff, githubRepoUrl }: { unread: number; name: string; isStaff: boolean; githubRepoUrl: string }) {
   const initial = name.trim().charAt(0).toUpperCase() || "S";
   return (
-    <header className="glass-panel sticky top-3 z-30 mb-4 flex h-[62px] items-center justify-between rounded-[20px] px-4 sm:px-5">
-      <Link href="/dashboard" aria-label="Connect⁺ home">
-        <Logo size="md" />
-      </Link>
-      <div className="flex items-center gap-2">
+    <header className="sticky top-3 z-30 mb-3 flex items-center justify-between md:justify-end">
+      <LogoBox className="md:hidden" />
+      <div className="glass-panel flex h-[54px] items-center gap-1 rounded-2xl px-2">
         <Link
           href="/notifications"
           aria-label={unread ? `${unread} unread notifications` : "Notifications"}

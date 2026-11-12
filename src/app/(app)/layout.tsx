@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { TopBar } from "@/components/shell/TopBar";
+import { TopBar, LogoBox } from "@/components/shell/TopBar";
 import { MainNav } from "@/components/shell/MainNav";
 import { SideRail } from "@/components/shell/SideRail";
 import { Footer } from "@/components/shell/Footer";
@@ -38,15 +38,18 @@ export default async function AppLayout({ children }: { children: React.ReactNod
   ]);
 
   return (
-    <div className="min-h-dvh px-3 py-3 pb-28 sm:px-6 md:pb-6">
+    <div className="min-h-dvh px-3 py-3 pb-28 sm:px-4 md:pb-3">
       <SessionGuard />
-      <div className="mx-auto w-full max-w-6xl">
-        <TopBar unread={unread.count ?? 0} name={profile.data?.full_name ?? "Student"} isStaff={!!role} githubRepoUrl={GITHUB_REPO_URL} />
-        <div className="flex items-start gap-4">
+      <div className="mx-auto flex w-full max-w-[1800px] items-start gap-3">
+        <aside className="sticky top-3 hidden h-[calc(100dvh-24px)] shrink-0 flex-col gap-3 md:flex">
+          <LogoBox />
           <SideRail />
-          <main className="app-main glass-panel min-w-0 flex-1 rounded-[27px] p-4 sm:p-8">{children}</main>
+        </aside>
+        <div className="min-w-0 flex-1">
+          <TopBar unread={unread.count ?? 0} name={profile.data?.full_name ?? "Student"} isStaff={!!role} githubRepoUrl={GITHUB_REPO_URL} />
+          <main className="app-main glass-panel rounded-[27px] p-4 sm:p-8">{children}</main>
+          <Footer />
         </div>
-        <Footer />
       </div>
       <MainNav />
     </div>
