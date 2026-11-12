@@ -47,8 +47,8 @@ export default async function AppLayout({ children }: { children: React.ReactNod
           <SideRail />
         </aside>
         <div className="min-w-0 flex-1">
-          <DevNotice />
           <TopBar unread={unread.count ?? 0} name={profile.data?.full_name ?? "Student"} isStaff={!!role} githubRepoUrl={GITHUB_REPO_URL} />
+          <DevNotice className="-mt-1 mb-3 flex justify-center md:hidden" />
           <main className="app-main glass-panel rounded-[27px] p-4 sm:p-8">{children}</main>
           <Footer />
         </div>

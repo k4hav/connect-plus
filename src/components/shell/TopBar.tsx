@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Bell } from "lucide-react";
 import { Logo } from "@/components/brand/Logo";
+import { DevNotice } from "./DevNotice";
 import { MoreMenu } from "./MoreMenu";
 
 /** Small glass box with the logo. */
@@ -18,6 +19,7 @@ export function TopBar({ unread, name, isStaff, githubRepoUrl }: { unread: numbe
   return (
     <header className="sticky top-3 z-30 mb-3 flex items-center justify-between md:justify-end">
       <LogoBox className="md:hidden" />
+      <DevNotice className="pointer-events-none absolute inset-x-0 hidden justify-center md:flex" />
       <div className="glass-panel flex h-[54px] items-center gap-1 rounded-2xl px-2">
         <Link
           href="/notifications"
