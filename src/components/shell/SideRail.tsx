@@ -6,7 +6,6 @@ import { useEffect, useRef, useState } from "react";
 import { Bookmark, Bug, Code2, Info, Lightbulb, User, Users } from "lucide-react";
 import { ITEMS, indexFor } from "./MainNav";
 
-const ROW = 46; // height of one menu row in px
 const GAP = 6;
 const PAD = 10;
 
@@ -47,14 +46,14 @@ export function SideRail() {
   return (
     <nav
       aria-label="Main"
-      className="glass-panel flex min-h-0 w-[68px] flex-1 flex-col overflow-y-auto rounded-[26px] lg:w-[236px]"
+      className="glass-panel flex min-h-0 w-[68px] [--row:46px] [@media(min-height:860px)]:[--row:54px] [@media(min-height:1000px)]:[--row:62px] flex-1 flex-col overflow-y-auto rounded-[26px] lg:w-[236px]"
       style={{ padding: PAD }}
     >
       <div className="relative">
         <span
           aria-hidden="true"
           className={`side-drop ${moving ? "is-moving" : ""}`}
-          style={{ top: active * (ROW + GAP), left: 0, right: 0, height: ROW }}
+          style={{ top: `calc(${active} * (var(--row) + ${GAP}px))`, left: 0, right: 0, height: "var(--row)" }}
         />
         <ul className="relative flex flex-col" style={{ gap: GAP }}>
           {ITEMS.map((it, i) => (
@@ -65,8 +64,8 @@ export function SideRail() {
                 title={it.label}
                 aria-current={i === active ? "page" : undefined}
                 onClick={() => { setTapped(i); window.setTimeout(() => setTapped(-1), 600); }}
-                className={`${row} ${i === active ? "text-white" : "text-white/65 hover:text-white"}`}
-                style={{ height: ROW }}
+                className={`${row} ${i === active ? "text-white" : "text-white/70 hover:text-white"}`}
+                style={{ height: "var(--row)" }}
               >
                 <span key={tapped === i ? "t" : "n"} className={tapped === i ? "side-icon-pop" : "inline-flex"}>{it.icon}</span>
                 <span className="hidden text-[15px] font-medium lg:inline">{it.label}</span>
@@ -76,7 +75,13 @@ export function SideRail() {
         </ul>
       </div>
 
-      <div className="mt-auto" />
+      <div className="hidden min-h-0 flex-1 items-end pb-3 pt-4 lg:flex">
+        <Link href="/issues/new" className="press block w-full rounded-2xl border border-cyan/40 bg-gradient-to-br from-cyan/25 to-cyan/[0.04] p-4 text-white">
+          <p className="text-[15px] font-semibold leading-snug">Found a problem?</p>
+          <span className="mt-2.5 inline-flex h-9 items-center gap-1.5 rounded-xl bg-cyan px-3 text-xs font-medium text-white">Raise an issue</span>
+        </Link>
+      </div>
+      <div className="mt-auto lg:mt-0" />
       <div className="my-3 h-px bg-white/10" />
       <p className="mb-1 hidden px-4 text-[11px] font-medium uppercase tracking-wider text-white/40 lg:block">More</p>
       <ul className="flex flex-col gap-0.5">
@@ -88,7 +93,7 @@ export function SideRail() {
                 href={m.href}
                 aria-label={m.label}
                 title={m.label}
-                className={`flex h-10 items-center justify-center gap-3 rounded-full text-sm transition-colors lg:justify-start lg:px-4 ${on ? "bg-white/10 text-white" : "text-white/55 hover:bg-white/5 hover:text-white"}`}
+                className={`flex h-[calc(var(--row)-8px)] items-center justify-center gap-3 rounded-full text-sm transition-colors lg:justify-start lg:px-4 ${on ? "bg-white/10 text-white" : "text-white/60 hover:bg-white/5 hover:text-white"}`}
               >
                 {m.icon}
                 <span className="hidden lg:inline">{m.label}</span>

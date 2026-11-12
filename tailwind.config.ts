@@ -5,20 +5,21 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        bg: "#080505",
-        surface: "#120808",
-        card: "#1A0D0D",
+        bg: "#050505",
+        surface: "#0B0B0C",
+        card: "#111113",
         cyan: { DEFAULT: "#FF3B47" },
         bright: "#FF7A80",
         electric: "#FF6A3D",
         emerald: { DEFAULT: "#13B89A" },
         amber: { DEFAULT: "#FFBD65" },
-        ink: "#FBF6F6",
-        muted: "#B3A3A3",
+        ink: "#FFFFFF",
+        muted: "#A3A3AB",
         success: "#34D399",
         danger: "#F87171",
       },
       fontFamily: {
+        display: ["Bricolage Grotesque", "Outfit", "ui-sans-serif", "system-ui", "sans-serif"],
         sans: ["Outfit", "Inter", "ui-sans-serif", "system-ui", "-apple-system", "Segoe UI", "Roboto", "sans-serif"],
       },
       boxShadow: {
